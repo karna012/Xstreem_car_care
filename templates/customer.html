@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wash History - Xtreem Car Care</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0f19;
+      --surface: #151d2c;
+      --surface2: #1d293d;
+      --border: #2d3a4f;
+      --text: #edf2f7;
+      --muted: #98a7bd;
+      --accent: #f59e0b;
+      --good: #22c55e;
+      --blue: #3b82f6;
+      --bad: #ef4444;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      line-height: 1.5;
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 1.25rem; }
+
+    .header {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .logo i, .accent { color: var(--accent); }
+    .phone { color: var(--muted); font-size: 0.9rem; }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(2, minmax(140px, 0.5fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .customer h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin-bottom: 0.3rem; }
+    .customer p, .label { color: var(--muted); font-size: 0.9rem; }
+    .metric .value { font-size: 2.2rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .metric .label { margin-top: 0.45rem; }
+
+    .section-title {
+      font-size: 1rem;
+      margin: 1.4rem 0 0.75rem;
+      color: var(--text);
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .vehicles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .vehicle-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .plate {
+      display: inline-flex;
+      background: #f8fafc;
+      color: #111827;
+      border: 2px solid #d1d5db;
+      border-radius: 5px;
+      padding: 0.25rem 0.55rem;
+      font-family: Consolas, monospace;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.65rem;
+    }
+
+    .vehicle-card h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+    .vehicle-card p { color: var(--muted); font-size: 0.88rem; }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 0.78rem 0.9rem; text-align: left; white-space: nowrap; }
+    th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    td { border-top: 1px solid var(--border); font-size: 0.9rem; }
+
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: capitalize;
+      border: 1px solid var(--border);
+    }
+
+    .status.completed { color: var(--good); border-color: rgba(34,197,94,.35); }
+    .status.confirmed { color: var(--blue); border-color: rgba(59,130,246,.35); }
+    .status.cancelled { color: var(--bad); border-color: rgba(239,68,68,.35); }
+    .status.pending { color: var(--accent); border-color: rgba(245,158,11,.35); }
+    .notice {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      color: #fbbf24;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 720px) {
+      .summary { grid-template-columns: 1fr; }
+      .brand { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <i class="fas fa-car-side"></i>
+        <span>XTREEM<span class="accent"> CAR CARE</span></span>
+      </div>
+      <div class="phone">+91 8197180012</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="summary">
+      <div class="panel customer">
+        <p class="label">Customer wash record</p>
+        <h1>{{ history.name }}</h1>
+        <p>{{ history.phone }}</p>
+      </div>
+      <div class="panel metric">
+        <div class="value">{{ history.completed_count }}</div>
+        <div class="label">Completed washes</div>
+      </div>
+      <div class="panel metric">
+        <div class="value">{{ history.vehicles | length }}</div>
+        <div class="label">Vehicle{{ 's' if history.vehicles | length != 1 else '' }}</div>
+      </div>
+    </section>
+
+    {% if history.completed_count == 0 %}
+    <div class="notice">
+      No completed washes are recorded yet. Bookings will appear below, and the wash count will increase after the admin marks a booking as completed.
+    </div>
+    {% endif %}
+
+    <h2 class="section-title"><i class="fas fa-id-card"></i> Vehicles</h2>
+    <section class="vehicles">
+      {% for vehicle in history.vehicles %}
+      <article class="vehicle-card">
+        <div class="plate">{{ vehicle.plate }}</div>
+        <h3>{{ vehicle.vehicle_type }} - {{ (vehicle.vehicle_brand ~ ' ') if vehicle.vehicle_brand else '' }}{{ vehicle.vehicle_model }}</h3>
+        <p>{{ vehicle.completed }} completed wash{{ 'es' if vehicle.completed != 1 else '' }} from {{ vehicle.total }} record{{ 's' if vehicle.total != 1 else '' }}</p>
+      </article>
+      {% endfor %}
+    </section>
+
+    <h2 class="section-title"><i class="fas fa-clock-rotate-left"></i> Wash History</h2>
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Plate</th>
+            <th>Vehicle</th>
+            <th>Brand</th>
+            <th>Service</th>
+            <th>Status</th>
+            <th>Booked At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in history.records %}
+          {% set status = item.status or 'pending' %}
+          <tr>
+            <td>{{ item.preferred_date }}</td>
+            <td>{{ item.vehicle_plate or 'Not added' }}</td>
+            <td>{{ item.vehicle_type }} - {{ item.vehicle_model }}</td>
+            <td>{{ item.vehicle_brand or '-' }}</td>
+            <td>{{ item.service }}</td>
+            <td><span class="status {{ status }}">{{ status }}</span></td>
+            <td>{{ item.booked_at }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

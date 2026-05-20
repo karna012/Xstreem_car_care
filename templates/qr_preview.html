@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer QR - Xtreem Car Care</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      line-height: 1.5;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+    .card {
+      width: min(560px, 100%);
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: 1.2rem; }
+    .muted { color: #94a3b8; font-size: 0.9rem; }
+    .qr-box {
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .qr-box img {
+      width: min(320px, 100%);
+      height: auto;
+      display: block;
+    }
+    .url {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.75rem;
+      color: #e2e8f0;
+      word-break: break-all;
+      font-family: Consolas, monospace;
+      font-size: 0.86rem;
+    }
+    .warning {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      color: #fbbf24;
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    .btn {
+      border: 1px solid #475569;
+      border-radius: 8px;
+      color: #e2e8f0;
+      background: #273549;
+      padding: 0.62rem 0.9rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .btn.primary {
+      background: #f59e0b;
+      border-color: #f59e0b;
+      color: #111827;
+      font-weight: 700;
+    }
+    @media print {
+      body { background: #fff; color: #111827; }
+      .card { border: none; }
+      .warning, .actions { display: none; }
+      .url { color: #111827; border-color: #d1d5db; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="top">
+      <div>
+        <h1>{{ history.name }}</h1>
+        <p class="muted">{{ history.phone }} · {{ history.vehicles | length }} vehicle{{ 's' if history.vehicles | length != 1 else '' }}</p>
+      </div>
+      <div class="muted">Xtreem Car Care</div>
+    </div>
+
+    {% if is_local_url %}
+    <div class="warning">
+      This QR uses a local computer address. A customer's phone cannot open it unless your phone is on the same network and you open admin using your computer's network IP or a public domain.
+    </div>
+    {% endif %}
+
+    <div class="qr-box">
+      <img src="/admin/customer-qr/{{ token }}.svg" alt="Customer QR code">
+    </div>
+
+    <p class="muted">This is the link stored inside the QR:</p>
+    <div class="url">{{ scan_url }}</div>
+
+    <div class="actions">
+      <a class="btn primary" href="{{ scan_url }}" target="_blank">Open Customer Page</a>
+      <a class="btn" href="/admin/customer-qr/{{ token }}.svg" target="_blank">Open QR Image</a>
+      <a class="btn" href="/admin">Back to Admin</a>
+    </div>
+  </main>
+</body>
+</html>
